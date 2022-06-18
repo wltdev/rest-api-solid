@@ -1,8 +1,12 @@
-import express from "express";
-import { router } from "./routes";
+import 'module-alias/register'
+import express from 'express'
+import { router } from './routes'
 
-const app = express();
-app.use(express.json());
-app.use(router);
+import { ErrorMiddleware } from './middlewares/ErrorMiddleware'
 
-export { app };
+const app = express()
+app.use(express.json())
+app.use(router)
+app.use(ErrorMiddleware)
+
+export { app }

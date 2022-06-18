@@ -1,23 +1,23 @@
-import { Request, Response } from "express";
-import { CreateUserUseCase } from "./CreateUserUseCase";
+import { Request, Response } from 'express'
+import { CreateUserUseCase } from './CreateUserUseCase'
 
 export class CreateUserContoller {
   constructor(private createUserUseCase: CreateUserUseCase) {}
 
   async handle(request: Request, response: Response): Promise<Response> {
     try {
-      const { name, email, password } = request.body;
+      const { name, email, password } = request.body
       await this.createUserUseCase.execute({
         name,
         email,
-        password,
-      });
+        password
+      })
 
-      return response.status(201).send();
+      return response.status(201).send()
     } catch (error) {
       return response.status(400).json({
-        message: error.message || "Unexpected error",
-      });
+        message: error.message || 'Unexpected error'
+      })
     }
   }
 }
