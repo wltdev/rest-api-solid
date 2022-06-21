@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "ttsc -p tsconfig.json",
-    "start": "tsnd --transpile-only --respawn --ignore-watch node_module src/server.ts"
+    "start": "tsnd --transpile-only --respawn --ignore-watch node_module src/server.ts",
+    "test": "jest"
   },
   "_moduleAliases": {
     "@/": "dist/src"
@@ -18,12 +19,15 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "@types/jest": "^28.1.2",
     "@types/nodemailer": "^6.4.4",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0",
     "eslint": "^8.18.0",
     "eslint-plugin-import": "^2.26.0",
+    "jest": "^28.1.1",
     "standard": "^17.0.0",
+    "ts-jest": "^28.0.5",
     "ts-node": "^10.8.1",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.0.0",

@@ -13,24 +13,26 @@ export class CreateUserUseCase {
     const userAlreadyExists = await this.usersRepository.findByEmail(data.email)
 
     if (userAlreadyExists) {
-      throw new Error('User already exists.')
+      throw new Error('User already exists')
     }
 
     const user = new User(data)
 
     await this.usersRepository.save(user)
 
-    await this.mailProvider.sendMail({
-      to: {
-        name: data.name,
-        email: data.email
-      },
-      from: {
-        name: 'Testing My API',
-        email: 'testing@app.com'
-      },
-      subject: 'Welcome to the jungle',
-      body: '<p>Account created successful</p>'
-    })
+    // await this.mailProvider.sendMail({
+    //   to: {
+    //     name: data.name,
+    //     email: data.email
+    //   },
+    //   from: {
+    //     name: 'Testing My API',
+    //     email: 'testing@app.com'
+    //   },
+    //   subject: 'Welcome to the jungle',
+    //   body: '<p>Account created successful</p>'
+    // })
+
+    return user
   }
 }
