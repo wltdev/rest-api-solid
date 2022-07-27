@@ -9,9 +9,10 @@ export class PostgresUsersRepository implements IUsersRepository {
     this.prismaClient = new PrismaClient()
   }
 
-  private users: User[] = [
-    { id: 'test-fake', name: 'User Test', email: 'test@email.com', password: '123123' }
-  ]
+  async getList (): Promise<User[]> {
+    const docs = await this.prismaClient.user.findMany()
+    return docs
+  }
 
   async findByEmail(email: string): Promise<User> {
     const user = await this.prismaClient.user.findFirst({
