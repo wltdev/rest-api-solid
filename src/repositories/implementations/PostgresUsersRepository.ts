@@ -28,6 +28,9 @@ export class PostgresUsersRepository implements IUsersRepository {
     const user = await this.prismaClient.user.findFirst({
       where: {
         id
+      },
+      include: {
+        groups: true
       }
     })
 
@@ -35,9 +38,30 @@ export class PostgresUsersRepository implements IUsersRepository {
   }
 
   async save(payload: User): Promise<User> {
+    const { name, email, password } = payload
     const doc = await this.prismaClient.user.create({
       data: {
-        ...payload
+        name,
+        email,
+        password,
+        groups: {
+          connect: payload.groups
+        }
+      }
+    })
+
+    return doc
+  }
+
+  async update(id: string, payload: User): Promise<User> {
+    const doc = await this.prismaClient.user.update({
+      where: { id },
+      data: {
+        ...payload,
+        groups: {
+          set: [],
+          connect: payload.groups
+        }
       }
     })
 

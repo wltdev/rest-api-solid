@@ -6,11 +6,12 @@ export class CreateUserContoller {
 
   async handle(request: Request, response: Response): Promise<Response> {
     try {
-      const { name, email, password } = request.body
+      const { name, email, password, group } = request.body
       const user = await this.createUserUseCase.execute({
         name,
         email,
-        password
+        password,
+        group
       })
 
       return response.status(201).send(user)
