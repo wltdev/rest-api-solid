@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt'
+
 import { User } from '@/entities/User'
 import { IMailProvider } from '@/providers/IMailProvider'
 import { IUsersRepository } from '@/repositories/IUsersRespository'
@@ -13,12 +15,13 @@ export class CreateUserUseCase {
     const userAlreadyExists = await this.usersRepository.findByEmail(data.email)
 
     if (userAlreadyExists) {
-      throw new Error('User already exists 2')
+      throw new Error('User already exists')
     }
 
+    data.password = bcrypt.hashSync(data.password, 10)
     const user = new User(data)
 
-    await this.usersRepository.save(user)
+    const doc = await this.usersRepository.save(user)
 
     // await this.mailProvider.sendMail({
     //   to: {
@@ -33,6 +36,6 @@ export class CreateUserUseCase {
     //   body: '<p>Account created successful</p>'
     // })
 
-    return user
+    return doc
   }
 }

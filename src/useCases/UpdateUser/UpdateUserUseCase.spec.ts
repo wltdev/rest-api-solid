@@ -1,41 +1,39 @@
+import { MailtrapMailProvider } from '@/providers/implementations/MailtrapMailProvider'
 import { PostgresUsersRepository } from '@/repositories/implementations/PostgresUsersRepository'
+import { CreateUserUseCase } from '../CreateUser/CreateUserUseCase'
 import { UpdateUserUseCase } from './UpdateUserUseCase'
 import { User } from '@/entities/User'
 
 describe('Creating user', () => {
-  let upateUserUseCase: UpdateUserUseCase
+  let updateUserUseCase: UpdateUserUseCase
+  let createUserUseCase: CreateUserUseCase
+  let datetime: number
 
   beforeAll(() => {
     const postgresUsersRepository = new PostgresUsersRepository()
-    upateUserUseCase = new UpdateUserUseCase(
+    const mailtrapMailProvider = new MailtrapMailProvider()
+    updateUserUseCase = new UpdateUserUseCase(
       postgresUsersRepository
     )
+    createUserUseCase = new CreateUserUseCase(
+      postgresUsersRepository,
+      mailtrapMailProvider
+    )
+
+    datetime = new Date().getTime()
   })
 
-  it('should be able to create a new  user', async () => {
+  it('should be able to update a user', async () => {
     const userData = new User({
-      name: 'Testing',
-      email: 'testing@email.com',
+      name: `Testing ${datetime}`,
+      email: `testing${datetime}@email.com`,
       password: '123456'
     })
 
-    const id = 'asdasdasd'
+    const newUser = await createUserUseCase.execute(userData)
 
-    const user = await upateUserUseCase.execute(id, userData)
+    const user = await updateUserUseCase.execute(newUser.id, userData)
 
     expect(user).toHaveProperty('id')
-  })
-
-  it('should not be able to create an existing user', async () => {
-    const userData = new User({
-      name: 'Testing',
-      email: 'testing@email.com',
-      password: '123456'
-    })
-    const id = 'asdasdasd'
-
-    await expect(upateUserUseCase.execute(id, userData)).rejects.toEqual(
-      new Error('User already exists')
-    )
   })
 })

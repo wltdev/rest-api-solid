@@ -1,10 +1,11 @@
-import { PostgresUsersRepository } from '@/repositories/implementations/PostgresUsersRepository'
 import { MailtrapMailProvider } from '@/providers/implementations/MailtrapMailProvider'
+import { PostgresUsersRepository } from '@/repositories/implementations/PostgresUsersRepository'
 import { CreateUserUseCase } from './CreateUserUseCase'
 import { User } from '@/entities/User'
 
 describe('Creating user', () => {
   let createUserUseCase: CreateUserUseCase
+  let datetime: number
 
   beforeAll(() => {
     const postgresUsersRepository = new PostgresUsersRepository()
@@ -13,12 +14,14 @@ describe('Creating user', () => {
       postgresUsersRepository,
       mailtrapMailProvider
     )
+
+    datetime = new Date().getTime()
   })
 
   it('should be able to create a new  user', async () => {
     const userData = new User({
-      name: 'Testing',
-      email: 'testing@email.com',
+      name: `Testing ${datetime}`,
+      email: `testing${datetime}@email.com`,
       password: '123456'
     })
 
@@ -29,12 +32,12 @@ describe('Creating user', () => {
 
   it('should not be able to create an existing user', async () => {
     const userData = new User({
-      name: 'Testing',
-      email: 'testing@email.com',
+      name: `Testing ${datetime}`,
+      email: `testing${datetime}@email.com`,
       password: '123456'
     })
 
-    await createUserUseCase.execute(userData)
+    // await createUserUseCase.execute(userData)
 
     await expect(createUserUseCase.execute(userData)).rejects.toEqual(
       new Error('User already exists')

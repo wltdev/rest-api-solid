@@ -1,6 +1,6 @@
 export interface ICreateUserRequestDTO {
   name: string
   email: string
-  password: string
-  group: string
+  password?: string
+  group?: string
 }
